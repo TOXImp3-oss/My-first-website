@@ -3,166 +3,198 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Секретная комната</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Взлом системы</title>
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: radial-gradient(circle at 50% 40%, #242052, #090b18 70%);
-  color: white;
-  font-family: Arial, sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;padding:20px;
+ display:flex;align-items:center;justify-content:center;
+ background:radial-gradient(circle at top,#25204f,#080a14 75%);
+ color:white;font-family:Arial,sans-serif;
 }
-
-.stars {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(white 1px, transparent 1px),
-    radial-gradient(#8585ff 1px, transparent 1px);
-  background-size: 90px 90px, 130px 130px;
-  background-position: 0 0, 40px 60px;
-  opacity: .35;
-  animation: stars 25s linear infinite;
+.game{
+ width:100%;max-width:500px;padding:28px 22px;
+ background:#15172c;border:1px solid #6254a0;
+ border-radius:22px;text-align:center;
+ box-shadow:0 0 60px #7255ff25;
 }
-
-@keyframes stars {
-  to { transform: translateY(-90px); }
+.logo{color:#a99aff;letter-spacing:4px;font-size:11px}
+h1{font-size:32px;margin:24px 0 12px}
+p{color:#b9bad0;line-height:1.6}
+.stats{display:flex;justify-content:space-around;margin:24px 0}
+.stat{color:#aaa;font-size:12px}
+.stat strong{display:block;color:#fff;font-size:20px;margin-top:5px}
+.progress{height:5px;background:#30304c;border-radius:10px;overflow:hidden}
+#bar{height:100%;width:0;background:#9b69ff;transition:.3s}
+input{
+ width:100%;padding:16px;margin:20px 0;
+ background:#090c1c;border:1px solid #7161bd;
+ border-radius:10px;color:white;text-align:center;
+ font-size:25px;letter-spacing:8px;outline:none;
 }
-
-.container {
-  position: relative;
-  width: min(90%, 520px);
-  padding: 45px 25px;
-  border: 1px solid #7770bc55;
-  border-radius: 25px;
-  background: #17182cbb;
-  box-shadow: 0 0 80px #6655ff22;
-  backdrop-filter: blur(15px);
+button{
+ border:0;border-radius:10px;padding:14px 20px;
+ font-size:15px;font-weight:bold;cursor:pointer;
+ color:white;background:linear-gradient(100deg,#765aff,#b04cff);
+ margin:5px;transition:.2s;
 }
-
-.tag {
-  color: #a99aff;
-  letter-spacing: 4px;
-  font-size: 11px;
-  text-transform: uppercase;
-}
-
-h1 {
-  font-size: clamp(34px, 8vw, 48px);
-  margin: 22px 0 15px;
-}
-
-p {
-  color: #b9b9d1;
-  line-height: 1.7;
-  font-size: 16px;
-}
-
-button {
-  border: 0;
-  border-radius: 12px;
-  padding: 15px 28px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: .25s;
-}
-
-.primary {
-  margin-top: 25px;
-  color: white;
-  background: linear-gradient(100deg, #795cff, #a64dff);
-  box-shadow: 0 0 25px #865cff77;
-}
-
-.primary:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 0 40px #a65cffaa;
-}
-
-.secondary {
-  color: white;
-  background: #34344d;
-  margin: 25px 5px 0;
-}
-
-.hidden { display: none; }
-
-#message {
-  color: #c5b5ff;
-  font-size: 19px;
-  margin-top: 25px;
-}
-
+button:active{transform:scale(.96)}
+button:disabled{opacity:.35}
+.secondary{background:#30314e}
+.hidden{display:none!important}
+#message{min-height:30px;color:#c4aaff;font-weight:bold}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:22px 0}
+.choices button{min-height:65px;font-size:22px}
 </style>
 </head>
 <body>
+<div class="game">
+ <div class="logo">UNKNOWN SYSTEM · 001</div>
+ <h1>🔐 Взлом системы</h1>
+ <p id="intro">Система заблокирована. Три уровня отделяют тебя от доступа. Готов проверить себя?</p>
 
-<div class="stars"></div>
+ <div class="stats">
+  <div class="stat">УРОВЕНЬ<strong id="level">0/3</strong></div>
+  <div class="stat">ОЧКИ<strong id="score">0</strong></div>
+  <div class="stat">ВРЕМЯ<strong id="time">60</strong></div>
+ </div>
+ <div class="progress"><div id="bar"></div></div>
 
-<main class="container">
-  <div class="tag">UNKNOWN EXPERIENCE · 001</div>
+ <div id="welcome">
+  <button onclick="startGame()">НАЧАТЬ ВЗЛОМ</button>
+ </div>
 
-  <section id="start">
-    <h1>Секретная комната</h1>
-    <p>Ты случайно оказался здесь.<br>
-    Но случайностей не бывает...</p>
-    <button class="primary" onclick="begin()">
-      Нажми меня ✨
-    </button>
-  </section>
+ <div id="gameArea" class="hidden">
+  <h2 id="task"></h2>
+  <p id="description"></p>
+  <div id="controls"></div>
+  <p id="message"></p>
+ </div>
 
-  <section id="choice" class="hidden">
-    <h1>Ты уверен?</h1>
-    <p>После этого пути назад может не быть.</p>
-    <button class="primary" onclick="yes()">Да, продолжаем</button>
-    <button class="secondary" onclick="no()">Нет, я передумал</button>
-  </section>
-
-  <section id="ending" class="hidden">
-    <h1>Ты открыл секрет! 🔮</h1>
-    <p id="message"></p>
-    <button class="primary" onclick="restart()">Начать заново</button>
-  </section>
-</main>
+ <div id="finish" class="hidden">
+  <h2 id="finishTitle">СИСТЕМА ОТКРЫТА</h2>
+  <p id="finishText"></p>
+  <button onclick="startGame()">ИГРАТЬ СНОВА</button>
+ </div>
+</div>
 
 <script>
-function show(id) {
-  document.querySelectorAll("section").forEach(s =>
-    s.classList.add("hidden")
-  );
-  document.getElementById(id).classList.remove("hidden");
+let level=0,score=0,time=60,timer=null;
+let secret=0,attempts=0,sequence=[],position=0;
+
+const $=id=>document.getElementById(id);
+
+function update(){
+ $("level").textContent=level+"/3";
+ $("score").textContent=score;
+ $("time").textContent=time;
+ $("bar").style.width=(level/3*100)+"%";
 }
 
-function begin() {
-  show("choice");
+function startGame(){
+ clearInterval(timer);
+ level=0;score=0;time=60;
+ $("welcome").classList.add("hidden");
+ $("finish").classList.add("hidden");
+ $("gameArea").classList.remove("hidden");
+ update();
+ timer=setInterval(()=>{
+  time--;update();
+  if(time<=0)endGame(false);
+ },1000);
+ nextLevel();
 }
 
-function yes() {
-  show("ending");
-  document.getElementById("message").innerText =
-    "Самый большой секрет в том, что твоя следующая большая история начинается именно сейчас. Не бойся пробовать новое. 🚀";
+function nextLevel(){
+ level++;attempts=0;update();
+ $("message").textContent="";
+ $("controls").innerHTML="";
+
+ if(level===1){
+  $("task").textContent="Уровень 1. Секретный код";
+  $("description").textContent="Угадай трёхзначный код от 100 до 999. У тебя пять попыток. После каждой ошибки система даст подсказку.";
+  secret=Math.floor(Math.random()*900)+100;
+  $("controls").innerHTML=
+  '<input id="answer" type="number" min="100" max="999" placeholder="000"><button onclick="checkCode()">ПРОВЕРИТЬ</button>';
+ }
+
+ if(level===2){
+  $("task").textContent="Уровень 2. Последовательность";
+  $("description").textContent="Повтори последовательность символов в правильном порядке.";
+  sequence=Array.from({length:4},()=>Math.floor(Math.random()*4));
+  position=0;
+  const symbols=["◆","●","▲","■"];
+  $("controls").innerHTML='<div class="choices">'+symbols.map((s,i)=>'<button onclick="choose('+i+')">'+s+'</button>').join("")+'</div>';
+  $("message").textContent="Запомни: "+sequence.map(i=>symbols[i]).join(" ");
+  setTimeout(()=>{$("message").textContent="Теперь повтори последовательность!"},2500);
+ }
+
+ if(level===3){
+  $("task").textContent="Уровень 3. Финальный пароль";
+  $("description").textContent="Выбери единственный пароль, который соответствует подсказке: число больше 40, меньше 60 и делится на 7.";
+  $("controls").innerHTML='<div class="choices">'+[42,49,56,63].map(n=>'<button onclick="checkPassword('+n+')">'+n+'</button>').join("")+'</div>';
+ }
 }
 
-function no() {
-  show("ending");
-  document.getElementById("message").innerText =
-    "Ты можешь закрыть эту страницу... но теперь тебе наверняка интересно, что было бы дальше. 😏";
+function checkCode(){
+ let value=Number($("answer").value);
+ if(!value || value<100 || value>999){
+  $("message").textContent="Введи трёхзначное число!";
+  return;
+ }
+ attempts++;
+ if(value===secret){
+  score+=100;success();
+ }else{
+  $("message").textContent=(value<secret?"Код больше ↑":"Код меньше ↓")+" Осталось попыток: "+(5-attempts);
+  if(attempts>=5)endGame(false);
+ }
+ update();
 }
 
-function restart() {
-  show("start");
+function choose(n){
+ if(n===sequence[position]){
+  position++;
+  if(position===sequence.length){
+   score+=150;success();
+  }else{
+   $("message").textContent="Верно! Осталось символов: "+(sequence.length-position);
+  }
+ }else{
+  endGame(false);
+ }
+ update();
+}
+
+function checkPassword(n){
+ if(n===49){
+  score+=250;success();
+ }else{
+  $("message").textContent="Неверный пароль. Попробуй ещё раз!";
+ }
+ update();
+}
+
+function success(){
+ $("message").textContent="ДОСТУП ПОЛУЧЕН! ✓";
+ $("controls").innerHTML='<button onclick="nextLevel()">СЛЕДУЮЩИЙ УРОВЕНЬ →</button>';
+ if(level===3){
+  $("controls").innerHTML='<button onclick="endGame(true)">ЗАВЕРШИТЬ ВЗЛОМ</button>';
+ }
+ update();
+}
+
+function endGame(won){
+ clearInterval(timer);
+ $("gameArea").classList.add("hidden");
+ $("finish").classList.remove("hidden");
+ $("bar").style.width=won?"100%":(level/3*100)+"%";
+ $("finishTitle").textContent=won?"🎉 СИСТЕМА ВЗЛОМАНА":"⛔ ДОСТУП ЗАБЛОКИРОВАН";
+ $("finishText").textContent=won?
+ "Поздравляем! Ты прошёл все три уровня. Твой результат: "+score+" очков.":
+ "Время или попытки закончились. Ты набрал "+score+" очков. Попробуешь ещё раз?";
 }
 </script>
-
 </body>
 </html>
