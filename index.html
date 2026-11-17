@@ -2,39 +2,167 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой первый сайт</title>
-    <style>
-        body {
-            background: #101827;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 100px 20px;
-        }
-        h1 {
-            font-size: 42px;
-            color: #58a6ff;
-        }
-        p {
-            font-size: 20px;
-        }
-        button {
-            background: #58a6ff;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Секретная комната</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 40%, #242052, #090b18 70%);
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(#8585ff 1px, transparent 1px);
+  background-size: 90px 90px, 130px 130px;
+  background-position: 0 0, 40px 60px;
+  opacity: .35;
+  animation: stars 25s linear infinite;
+}
+
+@keyframes stars {
+  to { transform: translateY(-90px); }
+}
+
+.container {
+  position: relative;
+  width: min(90%, 520px);
+  padding: 45px 25px;
+  border: 1px solid #7770bc55;
+  border-radius: 25px;
+  background: #17182cbb;
+  box-shadow: 0 0 80px #6655ff22;
+  backdrop-filter: blur(15px);
+}
+
+.tag {
+  color: #a99aff;
+  letter-spacing: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: clamp(34px, 8vw, 48px);
+  margin: 22px 0 15px;
+}
+
+p {
+  color: #b9b9d1;
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 15px 28px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.primary {
+  margin-top: 25px;
+  color: white;
+  background: linear-gradient(100deg, #795cff, #a64dff);
+  box-shadow: 0 0 25px #865cff77;
+}
+
+.primary:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 0 40px #a65cffaa;
+}
+
+.secondary {
+  color: white;
+  background: #34344d;
+  margin: 25px 5px 0;
+}
+
+.hidden { display: none; }
+
+#message {
+  color: #c5b5ff;
+  font-size: 19px;
+  margin-top: 25px;
+}
+
+</style>
 </head>
 <body>
-    <h1>Привет, мир! 🚀</h1>
-    <p>Это мой первый сайт, созданный с помощью ИИ.</p>
-    <button onclick="alert('У меня получилось!')">
-        Нажми меня
+
+<div class="stars"></div>
+
+<main class="container">
+  <div class="tag">UNKNOWN EXPERIENCE · 001</div>
+
+  <section id="start">
+    <h1>Секретная комната</h1>
+    <p>Ты случайно оказался здесь.<br>
+    Но случайностей не бывает...</p>
+    <button class="primary" onclick="begin()">
+      Нажми меня ✨
     </button>
+  </section>
+
+  <section id="choice" class="hidden">
+    <h1>Ты уверен?</h1>
+    <p>После этого пути назад может не быть.</p>
+    <button class="primary" onclick="yes()">Да, продолжаем</button>
+    <button class="secondary" onclick="no()">Нет, я передумал</button>
+  </section>
+
+  <section id="ending" class="hidden">
+    <h1>Ты открыл секрет! 🔮</h1>
+    <p id="message"></p>
+    <button class="primary" onclick="restart()">Начать заново</button>
+  </section>
+</main>
+
+<script>
+function show(id) {
+  document.querySelectorAll("section").forEach(s =>
+    s.classList.add("hidden")
+  );
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function begin() {
+  show("choice");
+}
+
+function yes() {
+  show("ending");
+  document.getElementById("message").innerText =
+    "Самый большой секрет в том, что твоя следующая большая история начинается именно сейчас. Не бойся пробовать новое. 🚀";
+}
+
+function no() {
+  show("ending");
+  document.getElementById("message").innerText =
+    "Ты можешь закрыть эту страницу... но теперь тебе наверняка интересно, что было бы дальше. 😏";
+}
+
+function restart() {
+  show("start");
+}
+</script>
+
 </body>
 </html>
